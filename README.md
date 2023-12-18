@@ -26,10 +26,10 @@ new dragger.init();
 | :---- | :---- | :---- | :---- |
 | listTag | String | 列表项标签 | 默认 `LI` |
 | maxRemains | Number | 列表项最小值 | 默认 `0`（拖拽列表/列表项） |
-| dataPrefix | String | 本地储存前缀 | 默认 `ls_` |
-| dataStored | Boolean | 本地储存记录 | 默认 `false`（初始化后为 `true`，所有列表记录被删除后返回 `false` 并自动重建默认列表） |
 | defaultRow | Number | 默认列表行数 | 默认 `2` |
 | defaultCol | Number | 默认列表列数 | 默认 `2` |
+| dataPrefix | String | 本地储存前缀 | 默认 `ls_` |
+| dataStored | Boolean | 本地储存记录 | 默认 `false`（初始化后为 `true`，所有列表记录被删除后返回 `false` 并自动重建默认列表） |
 
 
 #### class-> 静态参数
@@ -63,7 +63,7 @@ gragger.list;  // 返回当前本地储存列表及列表组包裹元素
 
 // setter
 dragger.list = {
-    select: {  // 除执行 delete->true 外（0为第一项），当索引为 0 时，将默认选中 当前列表/列表项 中最后一项（如操作新增时）
+    select: {  // 除执行 delete->true 外（0为第一项），当索引为 0 时，默认选中当前列表中最后一项（如操作新增时）
         list: 0,  // 选择列表索引
         item: 0  // 选择列表项索引
     },
@@ -86,6 +86,8 @@ dragger.list = {
 const custom_args = {
     static: {
         maxRemains: 1,  // 所有列表在拖拽时至少保留 1 个列表项（防止空列表）
+        defaultCol: 1,  // 默认生成一列（此项为 0 时 需手动指定 element->wrap 元素以响应 setter 操作）
+        defaultRow: 1   // 默认生成一行
     }
 };
 

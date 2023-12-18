@@ -35,10 +35,10 @@ const dragger = {
                 console.log('data loaded from (sorted)ls', sortedKeys);
             }else{
                 // create new data
-                const _d_columns = _s.static.defaultCol,
-                      _d_rows = _s.static.defaultRow;
+                const _d_columns = _s.static.defaultCol;
+                if(_d_columns<=0) return;
                 for(let i=0;i<_d_columns;i++){
-                    w_.appendChild(_m.init_list.apply(_s, ['OL', _d_rows]));
+                    w_.appendChild(_m.init_list.apply(_s, ['OL', _s.static.defaultRow]));
                 }
                 // save data
                 _m.data_driven(w_.childNodes);
@@ -503,7 +503,9 @@ const dragger = {
                 dragger.init._conf = _this._singleton_conf._rewriter.call(_this, user_conf);
                 // init&load dom..
                 dragger.dom.initiate();
-                document.body.appendChild(dragger.init._conf.element.wrap);
+                const wrapper = dragger.init._conf.element.wrap;
+                if(!wrapper) throw new Error('invalid wrapper element! need specify an Element for lists while initilizing if set defaultCol as 0.');
+                document.body.appendChild(wrapper);
                 // bind&exec dom events...
                 _util.addEvent(document, 'dragstart', dragger.mod.behavior.dragstart.bind(dragger));
                 // _util.addEvent(document, 'dragend', dragger.mod.behavior.dragend.bind(dragger));
@@ -530,6 +532,7 @@ const dragger = {
               _mods = this.mod.methods,
               wrapper = _conf.element.wrap,
               liTag = _conf.static.listTag;
+        if(!wrapper) return false;
         _util.args_rewriter.apply(dragger, [_args, {
             select: {list: 0,item: 0,},
             action: {
@@ -664,11 +667,4 @@ Object.defineProperties(dragger.init.prototype, {
         }(),
         configurable: false,
     },
-});
-
-// use keyword "new" to point to init method.
-new dragger.init({
-    static: {
-        maxRemains: 1,
-    }
 });
