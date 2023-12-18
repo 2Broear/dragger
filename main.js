@@ -26,17 +26,20 @@ const dragger = {
             }
             let w_ = _s.element.wrap || document.createElement('DIV');
             w_.className = _s.class.wrap;
-            if(_s.static.dataStored){  // load(sorted) data
+            if(_s.static.dataStored){
+                // load(sorted) data
                 const sortedKeys = _m.sort_stored();
                 for(let i=0,sl=sortedKeys.length;i<sl;i++){
                     w_.innerHTML += ls.getItem(sortedKeys[i]);
                 }
                 console.log('data loaded from (sorted)ls', sortedKeys);
-            }else{  // create new data
-                w_.appendChild(_m.init_list.apply(_s, ['OL', 2]));
-                w_.appendChild(_m.init_list.apply(_s, ['UL', 2]));
-                w_.appendChild(_m.init_list.apply(_s, ['OL', 1, 'test1']));
-                w_.appendChild(_m.init_list.apply(_s, ['UL', 1, 'test2']));
+            }else{
+                // create new data
+                const _d_columns = _s.static.defaultCol,
+                      _d_rows = _s.static.defaultRow;
+                for(let i=0;i<_d_columns;i++){
+                    w_.appendChild(_m.init_list.apply(_s, ['OL', _d_rows]));
+                }
                 // save data
                 _m.data_driven(w_.childNodes);
             }
@@ -625,6 +628,8 @@ Object.defineProperties(dragger.init.prototype, {
                     static: {
                         listTag: 'LI',
                         maxRemains: 0,
+                        defaultRow: 2,
+                        defaultCol: 2,
                         dataPrefix: 'ls_',
                         dataStored: false, //record if any init_list ls exists.
                     },
@@ -659,4 +664,11 @@ Object.defineProperties(dragger.init.prototype, {
         }(),
         configurable: false,
     },
+});
+
+// use keyword "new" to point to init method.
+new dragger.init({
+    static: {
+        maxRemains: 1,
+    }
 });
